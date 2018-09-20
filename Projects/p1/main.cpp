@@ -6,7 +6,7 @@
  ************************************************************************/
 #include "sorting.h"
 #include "clocking.h"
-#define CLOCKED
+//#define CLOCKED
 using namespace std;
 
 int main(){
