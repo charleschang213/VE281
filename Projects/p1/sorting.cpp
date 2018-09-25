@@ -66,7 +66,7 @@ void quick_sort(int *arr,int n){
 			arrl[lflag] = arr[i];
 			lflag++;
 		}
-		else if (arr[i]>arr[pivot]) {
+		else if ((arr[i]>=arr[pivot])&&(i!=pivot)) {
 			arrr[rflag] = arr[i];
 			rflag++;
 		}
@@ -83,6 +83,10 @@ void quick_sort(int *arr,int n){
 
 void quick_sort_inplace(int *arr, int n){
 	if ((n==0)||(n==1)) return;
+	if ((n==2)){
+		if (arr[0]>arr[1]) SWAP(arr[0],arr[1]);
+		return;
+	}
 	int pivot = rand()%n;
 	SWAP(arr[pivot],arr[0]);
 	int lflag=1,rflag=n-1;

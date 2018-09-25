@@ -24,6 +24,7 @@ int main(){
 	};
 	int mode,n,*arr;
 	cin >> mode >> n;
+	if (n==0) return 0;
 	arr = new int [n];
 	for (int i=0;i<n;i++) cin >> arr[i];
 	func[mode](arr,n);
