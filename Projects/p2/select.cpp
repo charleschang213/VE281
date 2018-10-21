@@ -28,21 +28,26 @@ int rselect(int *arr,int size,int k){
 }
 
 int dselect(int *arr,int size,int k){
-	if (size<5) {
-		quick_sort_inplace(arr,size);
+	if (size<=5) {
+		for (int i=0;i<size;i++)
+			for (int j=i+1;j<size;j++)
+				if (arr[i]>arr[j]) SWAP(arr[i],arr[j]);
 		return arr[k];
 	}
 	int groups = size/5;
+	if (size%5==0) groups--;
 	int *C = new int[groups];
 	for (int i=0;i<groups;i++){
-			int *nowgroup = arr+i*5;
-			quick_sort_inplace(nowgroup,5);
-			C[i] = nowgroup[2];
+			int nowgroup = i*5;
+			for (int j=0;j<3;j++)
+				for (int k=j+1;k<5;k++)
+					if (arr[nowgroup+j]>arr[nowgroup+k]) SWAP(arr[nowgroup+j],arr[nowgroup+k])
+			C[i] = arr[nowgroup+2];
 	}
 	int pnum = dselect(C,groups,groups/2);
 	delete []C;
 	int pivot;
-	for (pivot=0;arr[pivot]!=pnum;pivot++);
+	for (pivot=2;arr[pivot]!=pnum;pivot++);
 	SWAP(arr[pivot],arr[0]);
 	int lflag=1,rflag=size-1;
 	while (lflag<rflag){
@@ -75,8 +80,13 @@ void quick_sort_inplace(int *arr, int n){
 	quick_sort_inplace(arr,rflag);
 	quick_sort_inplace(arr+rflag+1,n-rflag-1);
 }
-
+int cmp(const void *a,const void *b){
+	int ta = *((int*)a);
+	int tb = *((int*)b);
+	return ta-tb;
+}
 int sortselect(int *arr,int size,int k){
-	quick_sort_inplace(arr,size);
+	qsort(arr,size,sizeof(int),cmp);
+	//quick_sort_inplace(arr,size);
 	return arr[k];
 }

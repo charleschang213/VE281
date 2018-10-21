@@ -8,6 +8,7 @@
 #ifndef SELECT_H
 #define SELECT_H
 #include <cstdlib>
+#include <algorithm>
 #define SWAP(a,b) {if (a!=b) {a = a^b;b = a^b;a = a^b;}}
 int rselect(int *arr,int size,int k);
 int dselect(int *arr,int size,int k);
