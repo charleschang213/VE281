@@ -1,9 +1,9 @@
-#define P3_CLOCK
 #include "path.h"
 #include "string"
 #include<cstdlib>
 #ifdef P3_CLOCK
 #include <ctime>
+#include <sys/time.h>
 #endif
 
 #ifndef P3_CLOCK
@@ -46,48 +46,60 @@ int main(int argc, char *argv[]){
 }
 #else
 int main(){
-    long int sizes[10];
+    srand(time(NULL));
+	struct timeval t1,t2;
+	long int sizes[10];
     long int ts[3][10];
     for (long int i=0;i<10;i++) {
-        sizes[i] = 1000*(i+1);
-        for (long int j=0;j<3;j++) ts[j][i]=0.0;
+        sizes[i] = 50*(i+1);
+        for (long int j=0;j<3;j++) ts[j][i]=0;
     }
     for (long int i=0;i<10;i++){
-        std::cout << "Size: " << sizes[i];
+        std::cerr << "Size: " << sizes[i]<< std::endl;
         point_t **map = new point_t*[sizes[i]];
         for (long int j=0;j<sizes[i];j++){
             map[j] = new point_t[sizes[i]];
         }
         for (long int j=0;j<5;j++){
-            for (long int k=0;j<sizes[i];k++)
+            for (long int k=0;k<sizes[i];k++)
                 for (long int m=0;m<sizes[i];m++) {
-                    map[k][m].weight=mrand48();
+                    map[k][m].weight=rand()%1000;
                     map[k][m].pathcost=0;
                     map[k][m].pre=NULL;
                     map[k][m].x=m;
                     map[k][m].y=k;
+					map[k][m].reached=false;
                 }
-            clock_t now = clock();
-            path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,UNSORTED,false);
-            ts[0][i]+=(clock()-now);
-            for (long int k=0;j<sizes[i];k++)
+			gettimeofday(&t1,NULL);
+			path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,UNSORTED,false);
+            gettimeofday(&t2,NULL);
+			ts[0][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
+            for (long int k=0;k<sizes[i];k++)
                 for (long int m=0;m<sizes[i];m++) {
                     map[k][m].pathcost=0;
+					map[k][m].reached=false;
                     map[k][m].pre=NULL;
                 }
+			gettimeofday(&t1,NULL);
             path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,BINARY,false);
-            ts[1][i]+=(clock()-now);
-            for (long int k=0;j<sizes[i];k++)
+            gettimeofday(&t2,NULL);
+			ts[1][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
+			for (long int k=0;k<sizes[i];k++)
                 for (long int m=0;m<sizes[i];m++) {
                     map[k][m].pathcost=0;
+					map[k][m].reached=false;
                     map[k][m].pre=NULL;
                 }
-            path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,FIBONACCI,false);
-            ts[2][i]+=(clock()-now);
+			gettimeofday(&t1,NULL);
+			path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,FIBONACCI,false);
+       	    gettimeofday(&t2,NULL);
+			ts[2][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
         }
+		for (long int k=0;k<sizes[i];k++) delete []map[k];
+		delete []map;
     }
     for (int i=0;i<3;i++){
-        for (int j=0;j<10;j++) std::cout << ts[i][j];
+        for (int j=0;j<10;j++) std::cout << ts[i][j] <<" ";
         std::cout << std::endl;
     }
     return 0;

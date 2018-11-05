@@ -31,8 +31,10 @@ void path(long int m,long int n, point_t **map,long int sx,long int sy,long int 
             map[y1][x1].pre = &(map[c.y][c.x]);
             if ((x1==ex)&&(y1==ey)){
                 if (v) std::cout <<  "Cell (" << x1 << ", " << y1 << ") with accumulated length " << map[y1][x1].pathcost << " is the ending point.\n";
-                std::cout << "The shortest path from (" << sx << ", " << sy << ") to (" << ex << ", " << ey << ") is " << map[y1][x1].pathcost << ".\nPath:\n";
-                backtrace(map, ex,ey);
+#ifndef P3_CLOCK
+				std::cout << "The shortest path from (" << sx << ", " << sy << ") to (" << ex << ", " << ey << ") is " << map[y1][x1].pathcost << ".\nPath:\n";
+				backtrace(map, ex,ey);
+#endif
                 delete pq;
                 return; 
             } 
