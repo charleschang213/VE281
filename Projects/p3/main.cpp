@@ -68,6 +68,7 @@ int main(){
                     map[k][m].y=k;
                 }
             clock_t now = clock();
+            std::cout << "UNSORTED" << std::endl;
             path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,UNSORTED,false);
             ts[0][i]+=(clock()-now);
             for (long int k=0;j<sizes[i];k++)
@@ -75,6 +76,7 @@ int main(){
                     map[k][m].pathcost=0;
                     map[k][m].pre=NULL;
                 }
+            std::cout << "BINARY" << std::endl;
             path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,BINARY,false);
             ts[1][i]+=(clock()-now);
             for (long int k=0;j<sizes[i];k++)
@@ -82,6 +84,7 @@ int main(){
                     map[k][m].pathcost=0;
                     map[k][m].pre=NULL;
                 }
+            std::cout << "FIB" << std::endl;
             path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,FIBONACCI,false);
             ts[2][i]+=(clock()-now);
         }
