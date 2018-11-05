@@ -70,29 +70,17 @@ int main(){
                     map[k][m].y=k;
 					map[k][m].reached=false;
                 }
-<<<<<<< HEAD
-            clock_t now = clock();
-            std::cout << "UNSORTED" << std::endl;
-            path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,UNSORTED,false);
-            ts[0][i]+=(clock()-now);
-            for (long int k=0;j<sizes[i];k++)
-=======
 			gettimeofday(&t1,NULL);
 			path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,UNSORTED,false);
             gettimeofday(&t2,NULL);
 			ts[0][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
             for (long int k=0;k<sizes[i];k++)
->>>>>>> 7ae7e51374112e4a7a1e75a028e9cacc167ba1c2
                 for (long int m=0;m<sizes[i];m++) {
                     map[k][m].pathcost=0;
 					map[k][m].reached=false;
                     map[k][m].pre=NULL;
                 }
-<<<<<<< HEAD
-            std::cout << "BINARY" << std::endl;
-=======
 			gettimeofday(&t1,NULL);
->>>>>>> 7ae7e51374112e4a7a1e75a028e9cacc167ba1c2
             path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,BINARY,false);
             gettimeofday(&t2,NULL);
 			ts[1][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
@@ -102,16 +90,10 @@ int main(){
 					map[k][m].reached=false;
                     map[k][m].pre=NULL;
                 }
-<<<<<<< HEAD
-            std::cout << "FIB" << std::endl;
-            path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,FIBONACCI,false);
-            ts[2][i]+=(clock()-now);
-=======
 			gettimeofday(&t1,NULL);
 			path(sizes[i],sizes[i],map,0,0,sizes[i]-1,sizes[i]-1,FIBONACCI,false);
        	    gettimeofday(&t2,NULL);
 			ts[2][i]+=(t2.tv_usec-t1.tv_usec)+1000000*(t2.tv_sec-t1.tv_sec);
->>>>>>> 7ae7e51374112e4a7a1e75a028e9cacc167ba1c2
         }
 		for (long int k=0;k<sizes[i];k++) delete []map[k];
 		delete []map;
