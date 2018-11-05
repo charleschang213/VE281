@@ -68,11 +68,10 @@ TYPE unsorted_heap<TYPE, COMP> :: dequeue_min() {
     for (auto it = this->data.begin();it!=this->data.end();it++){
         if (this->compare(*it,*minn)) minn = it;
     }
-    TYPE value = *minn;
-    this->data.erase(minn);
-    return value;// Fill in the body.
+	TYPE val = *minn;
+	this->data.erase(minn);
+    return val;
 }
-
 template<typename TYPE, typename COMP>
 const TYPE &unsorted_heap<TYPE, COMP> :: get_min() const {
     auto minn = this->data.begin();
