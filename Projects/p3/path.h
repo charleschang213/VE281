@@ -9,9 +9,9 @@
 enum Modes{UNSORTED,BINARY,FIBONACCI,MODES_NUM};
 
 typedef struct __point__{
-    int x,y;
-    int weight;
-    int pathcost;
+    long int x,y;
+    long int weight;
+    long int pathcost;
     bool reached;
     struct __point__ *pre;
 }point_t;
@@ -24,7 +24,7 @@ struct compare_point{
     }
 };
 
-void path(int m,int n, point_t **map,int sx,int sy,int ex,int ey,Modes mode,bool v);
+void path(long int m,long int n, point_t **map,long int sx,long int sy,long int ex,long int ey,Modes mode,bool v);
 
-void backtrace(point_t **map, int ex,int ey);
+void backtrace(point_t **map, long int ex,long int ey);
 #endif

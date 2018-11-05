@@ -1,6 +1,6 @@
 #include "path.h"
-void path(int m,int n, point_t **map,int sx,int sy,int ex,int ey,Modes mode,bool v){
-    int direct[4][2] = {{1,0},{0,1},{-1,0},{0,-1}};
+void path(long int m,long int n, point_t **map,long int sx,long int sy,long int ex,long int ey,Modes mode,bool v){
+    long int direct[4][2] = {{1,0},{0,1},{-1,0},{0,-1}};
     map[sy][sx].pathcost = map[sy][sx].weight;
     map[sy][sx].reached = true;
     priority_queue<point_t,compare_point> *pq;
@@ -16,15 +16,15 @@ void path(int m,int n, point_t **map,int sx,int sy,int ex,int ey,Modes mode,bool
             break;            
     }
     pq->enqueue(map[sy][sx]);
-    int counter = 0;
+    long int counter = 0;
     while (!pq->empty()){
         if (v) std::cout << "Step " << counter << std::endl;
         counter++;
         point_t c = pq->dequeue_min();
         if (v) std::cout << "Choose cell (" << c.x << ", " << c.y << ") with accumulated length " << c.pathcost << ".\n";
-        for (int i=0;i<4;i++){
-            int x1 = c.x+direct[i][0];
-            int y1 = c.y+direct[i][1];
+        for (long int i=0;i<4;i++){
+            long int x1 = c.x+direct[i][0];
+            long int y1 = c.y+direct[i][1];
             if (((x1<0)||(y1<0)||(x1>=n)||(y1>=m))||(map[y1][x1].reached)) continue;
             map[y1][x1].pathcost = map[y1][x1].weight+map[c.y][c.x].pathcost;
             map[y1][x1].reached = true;
@@ -36,13 +36,13 @@ void path(int m,int n, point_t **map,int sx,int sy,int ex,int ey,Modes mode,bool
                 delete pq;
                 return; 
             } 
-            if (v) std::cout << "Cell (" << x1 << ", " << y1 << ") with accumulated length " << map[y1][x1].pathcost << " is added into the queue.\n";
+            if (v) std::cout << "Cell (" << x1 << ", " << y1 << ") with accumulated length " << map[y1][x1].pathcost << " is added long into the queue.\n";
             pq->enqueue(map[y1][x1]);
         }
     }
 }
 
-void backtrace(point_t **map, int ex,int ey){
+void backtrace(point_t **map, long int ex,long int ey){
     if (map[ey][ex].pre==NULL){
         std::cout << "(" << ex << ", " << ey << ")\n";
         return;
