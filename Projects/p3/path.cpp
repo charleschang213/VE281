@@ -36,7 +36,7 @@ void path(long int m,long int n, point_t **map,long int sx,long int sy,long int 
                 delete pq;
                 return; 
             } 
-            if (v) std::cout << "Cell (" << x1 << ", " << y1 << ") with accumulated length " << map[y1][x1].pathcost << " is added long into the queue.\n";
+            if (v) std::cout << "Cell (" << x1 << ", " << y1 << ") with accumulated length " << map[y1][x1].pathcost << " is added into the queue.\n";
             pq->enqueue(map[y1][x1]);
         }
     }
