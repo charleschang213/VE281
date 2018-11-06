@@ -1,6 +1,6 @@
 #ifndef PATH_H
 #define PATH_H
-//#define P3_CLOCK
+#define P3_CLOCK
 #include "priority_queue.h"
 #include "binary_heap.h"
 #include "fib_heap.h"

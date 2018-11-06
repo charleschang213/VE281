@@ -51,7 +51,7 @@ int main(){
 	long int sizes[10];
     long int ts[3][10];
     for (long int i=0;i<10;i++) {
-        sizes[i] = 50*(i+1);
+        sizes[i] = 100*(i+1);
         for (long int j=0;j<3;j++) ts[j][i]=0;
     }
     for (long int i=0;i<10;i++){
@@ -63,7 +63,7 @@ int main(){
         for (long int j=0;j<5;j++){
             for (long int k=0;k<sizes[i];k++)
                 for (long int m=0;m<sizes[i];m++) {
-                    map[k][m].weight=rand()%1000;
+                    map[k][m].weight=mrand48();
                     map[k][m].pathcost=0;
                     map[k][m].pre=NULL;
                     map[k][m].x=m;
