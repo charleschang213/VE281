@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 a = np.loadtxt('result.txt');
 plt.figure(1);
-b = np.linspace(50,500,10);
+b = np.linspace(100,1000,10);
 plt.plot(b,a[0,:],label='Unsorted Heap')
 plt.plot(b,a[1,:],label='Binary Heap')
 plt.plot(b,a[2,:],label='Fibonacci Heap')
