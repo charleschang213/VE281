@@ -144,7 +144,7 @@ void orderbook::endofday(){
     }
 }
 
-void orderbook::endoftime(){
+void orderbook::endoftime(int ts){
     if (this->median){
         std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
         while (!(newname.empty())){
@@ -157,5 +157,5 @@ void orderbook::endoftime(){
             }
         }
     }
-    timestamp++;
+    timestamp = ts;
 }
