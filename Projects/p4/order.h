@@ -8,10 +8,10 @@ class order{
     int duration,ts;
     int price;
     public:
+        friend bool operator<(const order &a,const order &b);
         order(int oid,int cid,int eid,bool buy,int share,int duration,int ts,int price):
             oid(oid),cid(cid),eid(eid),buy(buy),share(share),duration(duration),ts(ts),price(price){}
         void doneshare(int val){share-=val;}
-        bool operator<(const order &a);
         int getoid(){return oid;}
         int getcid(){return cid;}
         int geteid(){return cid;}
@@ -21,4 +21,6 @@ class order{
         int getshare(){return share;}
         int getts(){return ts;}
 };
+
+bool operator<(const order &a,const order &b);
 #endif

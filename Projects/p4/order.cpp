@@ -1,9 +1,9 @@
 #include "order.h"
-bool order::operator<(const order &a){
-    if (buy){
-        if (price==a.price) return oid>a.oid;
-        return price<a.price;
+bool operator<(const order &a,const order &b){
+    if (a.buy){
+        if (a.price==b.price) return a.oid>b.oid;
+        return a.price<b.price;
     }
-    if (price==a.price) return oid>a.oid;
-        return price>a.price;
+    if (a.price==b.price) return a.oid>b.oid;
+        return a.price>b.price;
 }
