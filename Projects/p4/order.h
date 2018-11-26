@@ -15,7 +15,7 @@ class order{
         int getoid(){return oid;}
         int getcid(){return cid;}
         int geteid(){return eid;}
-        int getbuy(){return buy;}
+        bool getbuy(){return buy;}
         int getduration(){return duration;}
         int getprice(){return price;}
         int getshare(){return share;}
