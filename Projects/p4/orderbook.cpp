@@ -158,7 +158,7 @@ void orderbook::endoftime(int ts){
             equity eq = this->equities[ename[na]];
             int me = eq.getmedian();
             if (me>=0){
-                std::cout << "Median match price of " << na << " at time " << timestamp << " is " << me << std::endl; 
+                std::cout << "Median match price of " << na << " at time " << timestamp << " is $" << me << std::endl; 
             }
         }
     }
