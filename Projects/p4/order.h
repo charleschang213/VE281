@@ -14,7 +14,7 @@ class order{
         void doneshare(int val){share-=val;}
         int getoid(){return oid;}
         int getcid(){return cid;}
-        int geteid(){return cid;}
+        int geteid(){return eid;}
         int getbuy(){return buy;}
         int getduration(){return duration;}
         int getprice(){return price;}
