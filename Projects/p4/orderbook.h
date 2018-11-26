@@ -7,7 +7,7 @@
 #include "client.h"
 class orderbook{
     std::unordered_map<std::string,int> ename,cname;
-    std::priority_queue<std::string> ordered_ename,ordered_cname;
+    std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > ordered_ename,ordered_cname;
     std::vector<equity> equities;
     std::vector<client> clients;
     std::vector<std::string> tttnames;
