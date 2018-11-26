@@ -48,6 +48,7 @@ void orderbook::order_execute(order neworder){
             if (eq.sellercount()==0){
                 if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                     eq.addbuyer(neworder);
+                eq.modify(timestamp);
                 return;
             }
             order seller = eq.getseller();
@@ -55,6 +56,7 @@ void orderbook::order_execute(order neworder){
                 if (eq.sellercount()==0){
                     if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                         eq.addbuyer(neworder);
+                    eq.modify(timestamp);
                     return;
                 }
                 seller = eq.getseller();
@@ -79,6 +81,7 @@ void orderbook::order_execute(order neworder){
                 eq.addseller(seller);
                 if ((neworder.getduration()==-1||neworder.getduration()>this->timestamp)&&(neworder.getshare()!=0))
                         eq.addbuyer(neworder);
+                    eq.modify(timestamp);
                     return;
             }
             if ((seller.getduration()==-1||seller.getduration()>this->timestamp)&&(seller.getshare()!=0))
@@ -92,6 +95,7 @@ void orderbook::order_execute(order neworder){
             if (eq.buyercount()==0){
                 if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                     eq.addseller(neworder);
+                eq.modify(timestamp);
                 return;
             }
             order buyer = eq.getbuyer();
@@ -99,6 +103,7 @@ void orderbook::order_execute(order neworder){
                 if (eq.buyercount()==0){
                     if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                         eq.addseller(neworder);
+                    eq.modify(timestamp);
                     return;
                 }
                 buyer = eq.getbuyer();
@@ -123,6 +128,7 @@ void orderbook::order_execute(order neworder){
                 eq.addbuyer(buyer);
                 if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                     eq.addseller(neworder);
+                eq.modify(timestamp);
                 return;
             }
             if ((buyer.getduration()==-1||buyer.getduration()>this->timestamp)&&(buyer.getshare()!=0))
@@ -131,6 +137,7 @@ void orderbook::order_execute(order neworder){
         if ((neworder.getduration()==-1||(neworder.getduration()>this->timestamp&&neworder.getduration()!=neworder.getts()))&&(neworder.getshare()!=0))
             eq.addseller(neworder);
     }
+    eq.modify(timestamp);
 }
 
 void orderbook::endofday(){
@@ -150,7 +157,7 @@ void orderbook::endofday(){
 }
 
 void orderbook::endoftime(int ts){
-    for (auto &t:equities) t.modify(timestamp);
+    //for (auto &t:equities) t.modify(timestamp);
     if (this->median){
         std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
         while (!(newname.empty())){
