@@ -157,6 +157,24 @@ void orderbook::endoftime(int ts){
             }
         }
     }
+    if (this->midpoint){
+        std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
+        while (!(newname.empty())){
+            std::string na = newname.top();
+            newname.pop();
+            equity eq = this->equities[ename[na]];
+            if (eq.buyercount==0||eq.sellercount==0)
+                std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
+            else{
+                order bu = eq.getbuyer();
+                order se = eq.getseller();
+                int mp = (bu.getprice+se.getprice)/2;
+                eq.addbuyer(bu);
+                eq.addseller(se);
+                std::cout << "Midpoint of " << na << " at time " << timestamp << " is $" << mp << std::endl;
+            }
+        }
+    }
     if (ts!=-1)
         timestamp = ts;
     else timestamp++;
