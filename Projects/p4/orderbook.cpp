@@ -83,7 +83,7 @@ void orderbook::order_execute(order neworder){
             return;
         }
         order buyer = eq.getbuyer();
-        while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
+        while (buyer.getduration()!=-1&&buyer.getduration()<this->timestamp) {
             if (eq.sellercount()==0){
                 if (neworder.getduration()>this->timestamp)
                     eq.addseller(neworder);
