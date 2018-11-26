@@ -58,7 +58,7 @@ void orderbook::order_execute(order neworder){
             seller = eq.getseller();
         }
         client &c2 = this->clients[seller.getcid()];
-        if (seller.getprice()<neworder.getprice()){
+        if (seller.getprice()<=neworder.getprice()){
             int dshare = MIN(seller.getshare(),neworder.getshare());
             seller.doneshare(dshare);
             neworder.doneshare(dshare);
@@ -93,7 +93,7 @@ void orderbook::order_execute(order neworder){
             buyer = eq.getbuyer();
         }
         client &c2 = this->clients[buyer.getcid()];
-        if (neworder.getprice()<buyer.getprice()){
+        if (neworder.getprice()<=buyer.getprice()){
             int dshare = MIN(buyer.getshare(),neworder.getshare());
             buyer.doneshare(dshare);
             neworder.doneshare(dshare);
