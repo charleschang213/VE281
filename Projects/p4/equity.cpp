@@ -34,7 +34,7 @@ void equity::modify(int ts){
     }
     if (!buyers.empty()){
         order se = buyers.top();
-         bool quit = false;
+        bool quit = false;
         while (se.getduration()!=-1&&se.getduration()<=ts&&se.getduration()==se.getts()){
             buyers.pop();
             if (buyers.empty()){
