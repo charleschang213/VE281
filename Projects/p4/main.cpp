@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     int opt;
     bool median=false,midpoint=false,transfer=false,verbose=false;
     std::vector<std::string> tttnames;
-    while ((opt=getopt_long(argc,argv,"vmptg:",long_options,NULL))){
+    while ((opt=getopt_long(argc,argv,"vmptg:",long_options,NULL))!=EOF){
         switch(opt){
             case 'v':
                 verbose = true;
