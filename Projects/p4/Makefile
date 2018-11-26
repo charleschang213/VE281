@@ -13,7 +13,7 @@ order.o: order.cpp
 	g++ -c order.cpp -O2 -std=c++11
 
 orderbook.o: orderbook.cpp
-	g++ -c orderbook.cpp -O2 std=c++11
+	g++ -c orderbook.cpp -O2 -std=c++11
 
 clean:
 	rm -f *.o main
