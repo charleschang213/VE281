@@ -173,21 +173,26 @@ void orderbook::endoftime(int ts){
                 std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
             else{
                 order bu = eq.getbuyer();
+                bool quit=false;
                 while (bu.getduration()!=-1&&bu.getduration()<=this->timestamp){
                     if (eq.buyercount()==0){
                         std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
-                        continue;
+                        quit=true;
+                        break;
                     }
                     bu = eq.getbuyer();
                 }
+                if (quit) continue;
                 order se = eq.getseller();
                 while (se.getduration()!=-1&&se.getduration()<=this->timestamp){
                     if (eq.sellercount()==0){
                         std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
-                        continue;
+                        quit = true;
+                        break;
                     }
                     se = eq.getseller();
                 }
+                if (quit) continue;
                 int mp = (bu.getprice()+se.getprice())/2;
                 eq.addbuyer(bu);
                 eq.addseller(se);
