@@ -15,15 +15,15 @@ order equity::getseller()
 }
 
 void equity::modify(int ts){
-    if (!buyers.empty()){
-        order bu = buyers.top();
+    if (!sellers.empty()){
+        order bu = sellers.top();
         if (bu.getprice()<minb){
             mintime = ts;
             minb = bu.getprice();
         }
     }
-    if (!sellers.empty()){
-        order se = sellers.top();
+    if (!buyers.empty()){
+        order se = buyers.top();
         if (se.getprice()-minb > maxv){
             btime = mintime;
             stime = ts;
