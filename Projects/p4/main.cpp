@@ -46,6 +46,7 @@ int main(int argc, char *argv[]){
         while (curr_order.getts()>ob.getts()) ob.endoftime();
         ob.order_execute(curr_order);
     }
+    ob.endoftime();
     ob.endofday();
     return 0;
 }
