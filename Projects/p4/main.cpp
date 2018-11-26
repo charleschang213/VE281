@@ -40,6 +40,7 @@ int main(int argc, char *argv[]){
     int ts = 0;
     int oid = 0;
     while (std::cin){
+        std::cerr << oid << std::endl;
         std::string tmp;
         std::getline(std::cin,tmp);
         if (tmp.empty()) break;
