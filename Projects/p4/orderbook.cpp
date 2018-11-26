@@ -96,7 +96,7 @@ void orderbook::order_execute(order neworder){
             }
             order buyer = eq.getbuyer();
             while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
-                if (eq.sellercount()==0){
+                if (eq.buyercount()==0){
                     if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                         eq.addseller(neworder);
                     return;
