@@ -70,6 +70,7 @@ void orderbook::order_execute(order neworder){
                 this->transferred+=seller.getprice()*dshare;
                 this->completed++;
                 this->cshare+=dshare;
+                eq.adddealtprice(seller.getprice());
                 if (this->verbose)
                     std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << std::endl; 
             }
@@ -113,6 +114,7 @@ void orderbook::order_execute(order neworder){
                 this->transferred+=buyer.getprice()*dshare;
                 this->completed++;
                 this->cshare+=dshare;
+                eq.adddealtprice(buyer.getprice());
                 if (this->verbose)
                     std::cout << c2.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c1.getname() << " for $" << buyer.getprice() << "/share" << std::endl; 
             }
@@ -143,5 +145,17 @@ void orderbook::endofday(){
 }
 
 void orderbook::endoftime(){
+    if (this->median){
+        std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
+        while (!(newname.empty())){
+            std::string na = newname.top();
+            newname.pop();
+            equity eq = this->equities[ename[na]];
+            int me = eq.getmedian();
+            if (me>=0){
+                std::cout << "Median match price of " << na << " at time " << timestamp << " is " << me << std::endl; 
+            }
+        }
+    }
     timestamp++;
 }
