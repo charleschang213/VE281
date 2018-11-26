@@ -44,7 +44,6 @@ int main(int argc, char *argv[]){
         oid++;
         while (curr_order.getts()>ob.getts()) ob.endoftime();
         ob.order_execute(curr_order);
-        std::cin.get();
     }
     ob.endofday();
     return 0;
