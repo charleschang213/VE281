@@ -7,7 +7,7 @@
 order orderbook::order_generate(int oid,std::string line){
     std::istringstream sin(line);
     std::string tmp;
-    int cid,share,duration,price,eid,duration,ts;
+    int cid,share,duration,price,eid,ts;
     bool buy;
     sin >> tmp;
     ts = std::stoi(tmp);
