@@ -24,7 +24,7 @@ void equity::modify(int ts){
     }
     if (!buyers.empty()){
         order se = buyers.top();
-        if (se.getprice()-minb > maxv){
+        if (minb!=-1&&se.getprice()-minb > maxv){
             btime = mintime;
             stime = ts;
             maxv = se.getprice()-minb;
