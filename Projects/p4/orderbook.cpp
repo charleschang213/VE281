@@ -11,6 +11,7 @@ order orderbook::order_generate(int oid,std::string line){
     bool buy;
     sin >> tmp;
     ts = std::stoi(tmp);
+    if (ts>timestamp) endoftime(ts);
     sin >> tmp;
     if (cname.find(tmp)==cname.end()){
         ordered_cname.push(tmp);
