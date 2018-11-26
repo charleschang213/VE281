@@ -180,7 +180,7 @@ void orderbook::endoftime(int ts){
             }
         }
     }
-    for (auto t:equities) t.modify(timestamp);
+    for (auto &t:equities) t.modify(timestamp);
     if (ts!=-1)
         timestamp = ts;
     else timestamp++;
