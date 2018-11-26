@@ -22,7 +22,7 @@ class equity{
         int buyercount(){return buyers.size();}
         void adddealtprice(int p);
         int getmedian(){return median;}
-        void modify(int ts);
+        void modify(int ts,int val,bool buy);
         void strategyout(){
             std::cout << "Time travelers would buy " << ename<< " at time: "<< btime <<" and sell it at time: "<< stime << std::endl;
         }

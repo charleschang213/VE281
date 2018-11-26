@@ -14,41 +14,20 @@ order equity::getseller()
     return v;
 }
 
-void equity::modify(int ts){
-    if (!sellers.empty()){
-        order bu = sellers.top();
-        bool quit = false;
-        while (bu.getduration()!=-1&&bu.getduration()<=ts&&bu.getduration()==bu.getts()){
-            sellers.pop();
-            if (sellers.empty()){
-                quit = true;
-                break;
-            }
-            bu = sellers.top();
-        }
-        if (!quit)
-            if (bu.getprice()<minb){
+void equity::modify(int ts,int val, bool buy){
+    if (!buy){
+            if (val<minb){
                 mintime = ts;
-                minb = bu.getprice();
+                minb = val;
             }
     }
-    if (!buyers.empty()){
-        order se = buyers.top();
-        bool quit = false;
-        while (se.getduration()!=-1&&se.getduration()<=ts&&se.getduration()==se.getts()){
-            buyers.pop();
-            if (buyers.empty()){
-                quit = true;
-                break;
-            }
-            se = buyers.top();
-        }
-        if (!quit)
-            if (mintime!=-1&&se.getprice()-minb > maxv){
+    else {
+            if (mintime!=-1&&val-minb > maxv){
                 btime = mintime;
                 stime = ts;
-                maxv = se.getprice()-minb;
-            }
+                maxv = val-minb;
+            
+    }
     }
 }
 void equity::adddealtprice(int p){
