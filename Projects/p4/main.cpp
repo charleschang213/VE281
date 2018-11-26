@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
         if (tmp.empty()) break;
         order curr_order = ob.order_generate(oid,tmp);
         oid++;
-        while (curr_order.getts()>ob.getts()) ob.endoftime();
+        while (curr_order.getts()>ob.getts()) ob.endoftime(curr_order.getts());
         ob.order_execute(curr_order);
     }
     ob.endoftime();
