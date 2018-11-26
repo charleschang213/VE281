@@ -12,10 +12,15 @@ class orderbook{
     std::vector<client> clients;
     std::vector<std::string> tttnames;
     bool midpoint,median,transfer,verbose;
+    int timestamp,income,transferred,completed,cshare;
     public:
         order order_generate(int oid,std::string line);
         orderbook(bool midpoint,bool median,bool transfer,bool verbose,std::vector<std::string> tttnames):
             midpoint(midpoint),median(median),transfer(transfer),verbose(verbose),tttnames(tttnames),
-            ename(),cname(),ordered_ename(),ordered_cname(),equities(),clients(){}
+            ename(),cname(),ordered_ename(),ordered_cname(),equities(),clients(),timestamp(0),income(0),transferred(0),completed(0),cshare(0){}
+        void order_execute(order neworder);
+        void endofday();
+        void endoftime();
+        int getts(){return timestamp;}
 };
 #endif

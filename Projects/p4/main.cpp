@@ -42,6 +42,9 @@ int main(int argc, char *argv[]){
         std::getline(std::cin,tmp);
         order curr_order = ob.order_generate(oid,tmp);
         oid++;
+        while (curr_order.getts()>ob.getts()) ob.endoftime();
+        ob.order_execute(curr_order);
     }
+    ob.endofday();
     return 0;
 }
