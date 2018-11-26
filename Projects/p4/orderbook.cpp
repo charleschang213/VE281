@@ -150,6 +150,7 @@ void orderbook::endofday(){
 }
 
 void orderbook::endoftime(int ts){
+    for (auto &t:equities) t.modify(timestamp);
     if (this->median){
         std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
         while (!(newname.empty())){
@@ -172,7 +173,7 @@ void orderbook::endoftime(int ts){
                 std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
             else{
                 order bu = eq.getbuyer();
-                if (bu.getduration()!=-1&&bu.getduration()<this->timestamp){
+                if (bu.getduration()!=-1&&bu.getduration()<=this->timestamp){
                     if (eq.buyercount()==0){
                         std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
                         continue;
@@ -180,7 +181,7 @@ void orderbook::endoftime(int ts){
                     bu = eq.getbuyer();
                 }
                 order se = eq.getseller();
-                if (se.getduration()!=-1&&se.getduration()<this->timestamp){
+                if (se.getduration()!=-1&&se.getduration()<=this->timestamp){
                     if (eq.sellercount()==0){
                         std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
                         continue;
@@ -194,7 +195,6 @@ void orderbook::endoftime(int ts){
             }
         }
     }
-    for (auto &t:equities) t.modify(timestamp);
     if (ts!=-1)
         timestamp = ts;
     else timestamp++;
