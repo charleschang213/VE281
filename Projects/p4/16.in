@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_a	SELL	E_B	$1	#5	-1
-0	C_a	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_B	$1	#5	-1
-0	C_a	SELL	E_B	$1	#5	-1
-0	C_b	SELL	E_A	$1	#5	-1
-0	C_b	SELL	E_B	$1	#5	-1
-0	C_a	BUY		E_A	$100 #500	-1
-=======
 0	C_c	BUY	E_C	$25	#8	-1
 2	C_e	BUY	E_D	$10	#28	29
 2	C_d	SELL	E_E	$40	#1	13
@@ -966,4 +941,3 @@
 999	C_a	SELL	E_C	$40	#19	2
 999	C_h	SELL	E_A	$35	#20	0
 999	C_a	SELL	E_D	$20	#3	8
->>>>>>> 161b6f00a68fbe5123b151b78a4ebc25e82e62f6
