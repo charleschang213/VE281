@@ -77,7 +77,7 @@ void orderbook::order_execute(order neworder){
             }
             else{
                 eq.addseller(seller);
-                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                if ((neworder.getduration()==-1||neworder.getduration()>this->timestamp)&&(neworder.getshare()!=0))
                         eq.addbuyer(neworder);
                     return;
             }
