@@ -69,7 +69,7 @@ void orderbook::order_execute(order neworder){
             this->completed++;
             this->cshare+=dshare;
             if (this->verbose)
-                std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << std::endl; 
+                std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << this->timestamp<< std::endl; 
         }
         if ((neworder.getduration()==-1||neworder.getduration()>=this->timestamp)&&(neworder.getshare()!=0))
             eq.addbuyer(neworder);
