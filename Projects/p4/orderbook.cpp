@@ -48,7 +48,7 @@ void orderbook::order_execute(order neworder){
             return;
         }
         order seller = eq.getseller();
-        while (seller.getduration()!=-1&&seller.getduration()<this->timestamp) {
+        while (seller.getduration()!=-1&&seller.getduration()<=this->timestamp) {
             if (eq.sellercount()==0){
                 if (neworder.getduration()>this->timestamp)
                     eq.addbuyer(neworder);
@@ -69,7 +69,7 @@ void orderbook::order_execute(order neworder){
             this->completed++;
             this->cshare+=dshare;
             if (this->verbose)
-                std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << this->timestamp<< std::endl; 
+                std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << std::endl; 
         }
         if ((neworder.getduration()==-1||neworder.getduration()>=this->timestamp)&&(neworder.getshare()!=0))
             eq.addbuyer(neworder);
@@ -83,7 +83,7 @@ void orderbook::order_execute(order neworder){
             return;
         }
         order buyer = eq.getbuyer();
-        while (buyer.getduration()!=-1&&buyer.getduration()<this->timestamp) {
+        while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
             if (eq.sellercount()==0){
                 if (neworder.getduration()>this->timestamp)
                     eq.addseller(neworder);
