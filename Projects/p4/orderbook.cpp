@@ -163,12 +163,12 @@ void orderbook::endoftime(int ts){
             std::string na = newname.top();
             newname.pop();
             equity eq = this->equities[ename[na]];
-            if (eq.buyercount==0||eq.sellercount==0)
+            if (eq.buyercount()==0||eq.sellercount()==0)
                 std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
             else{
                 order bu = eq.getbuyer();
                 order se = eq.getseller();
-                int mp = (bu.getprice+se.getprice)/2;
+                int mp = (bu.getprice()+se.getprice())/2;
                 eq.addbuyer(bu);
                 eq.addseller(se);
                 std::cout << "Midpoint of " << na << " at time " << timestamp << " is $" << mp << std::endl;
