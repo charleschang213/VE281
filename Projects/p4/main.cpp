@@ -10,6 +10,8 @@ static const struct option long_options[] = {
     {"ttt",required_argument,NULL,'g'}
 };
 int main(int argc, char *argv[]){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
     int opt;
     bool median=false,midpoint=false,transfer=false,verbose=false;
     std::vector<std::string> tttnames;
