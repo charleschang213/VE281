@@ -13,7 +13,7 @@ class equity{
     int median;
     int btime,stime,maxv,mintime,minb;
     public:
-        equity(int eid,std::string ename):eid(eid),ename(ename),buyers(),sellers(),dealt(),median(-1),btime(0),stime(0),mintime(0),minb(INT32_MAX),maxv(INT32_MIN){}
+        equity(int eid,std::string ename):eid(eid),ename(ename),buyers(),sellers(),dealt(),median(-1),btime(-1),stime(-1),mintime(-1),minb(INT32_MAX),maxv(INT32_MIN){}
         void addbuyer(order v){buyers.push(v);}
         void addseller(order v){sellers.push(v);}
         order getbuyer();
