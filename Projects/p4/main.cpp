@@ -40,6 +40,7 @@ int main(int argc, char *argv[]){
     while (std::cin){
         std::string tmp;
         std::getline(std::cin,tmp);
+        if (tmp.empty()) break;
         order curr_order = ob.order_generate(oid,tmp);
         oid++;
         while (curr_order.getts()>ob.getts()) ob.endoftime();
