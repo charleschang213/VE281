@@ -13,5 +13,7 @@ class client{
         int buy(int share,int val){bought+=share;income-=val;}
         int sell(int share,int val){sold+=share;income+=val;}
         std::string getname(){return cname;}
+        int getbought(){return bought;}
+        int getsold(){return sold;}
 };
 #endif

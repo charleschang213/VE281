@@ -132,6 +132,14 @@ void orderbook::order_execute(order neworder){
 
 void orderbook::endofday(){
     std::cout << "---End of Day---\nCommission Earnings: " << this->income << "\nTotal Amount of Money Transferred: " << this->transferred << "\nNumber of Completed Trades: " << this->completed << "\nNumber of Shares Traded: " << this->cshare << std::endl;
+    if (this->transfer){
+        while (!this->ordered_cname.empty){
+            std::string na = ordered_cname.top();
+            ordered_cname.pop();
+            client cl = this->clients[cname[na]];
+            std::cout << na << " bought " << cl.getbought() << " and sold " << cl.getsold() << " for a net transfer of $" << cl.getincome() << std::endl;
+        }
+    }
 }
 
 void orderbook::endoftime(){
