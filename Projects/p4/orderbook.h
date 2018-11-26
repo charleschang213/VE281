@@ -20,7 +20,7 @@ class orderbook{
             ename(),cname(),ordered_ename(),ordered_cname(),equities(),clients(),timestamp(0),income(0),transferred(0),completed(0),cshare(0){}
         void order_execute(order neworder);
         void endofday();
-        void endoftime(int ts);
+        void endoftime(int ts=-1);
         int getts(){return timestamp;}
 };
 #endif

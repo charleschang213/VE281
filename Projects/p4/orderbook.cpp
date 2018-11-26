@@ -157,5 +157,7 @@ void orderbook::endoftime(int ts){
             }
         }
     }
-    timestamp = ts;
+    if (ts!=-1)
+        timestamp = ts;
+    else timestamp++;
 }
