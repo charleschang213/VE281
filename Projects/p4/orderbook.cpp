@@ -33,7 +33,8 @@ order orderbook::order_generate(int oid,std::string line){
     sin >> tmp;
     share = std::stoi(tmp.substr(1));
     sin >> tmp;
-    duration = ts+std::stoi(tmp);
+    duration = std::stoi(tmp);
+    if (duration!=-1) duration+=ts;
     sin.clear();
     return order(oid,cid,eid,buy,share,duration,ts,price); 
 }
