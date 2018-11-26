@@ -14,6 +14,23 @@ order equity::getseller()
     return v;
 }
 
+void equity::modify(int ts){
+    if (!buyers.empty()){
+        order bu = buyers.top();
+        if (bu.getprice()<minb){
+            mintime = ts;
+            minb = bu.getprice();
+        }
+    }
+    if (!sellers.empty()){
+        order se = sellers.top();
+        if (se.getprice()-minb > maxv){
+            btime = mintime;
+            stime = ts;
+            maxv = se.getprice()-minb;
+        }
+    }
+}
 void equity::adddealtprice(int p){
     dealt.push_back(p);
     int a = dealt.size()/2;

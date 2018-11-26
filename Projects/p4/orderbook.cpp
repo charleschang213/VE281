@@ -143,6 +143,10 @@ void orderbook::endofday(){
             std::cout << na << " bought " << cl.getbought() << " and sold " << cl.getsold() << " for a net transfer of $" << cl.getincome() << std::endl;
         }
     }
+    for (auto t:tttnames){
+        equity eq = equities[ename[t]];
+        eq.strategyout();
+    }
 }
 
 void orderbook::endoftime(int ts){
@@ -176,6 +180,7 @@ void orderbook::endoftime(int ts){
             }
         }
     }
+    for (auto t:equities) t.modify(timestamp);
     if (ts!=-1)
         timestamp = ts;
     else timestamp++;
