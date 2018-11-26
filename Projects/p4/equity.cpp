@@ -17,18 +17,38 @@ order equity::getseller()
 void equity::modify(int ts){
     if (!sellers.empty()){
         order bu = sellers.top();
-        if (bu.getprice()<minb){
-            mintime = ts;
-            minb = bu.getprice();
+        bool quit = false;
+        while (bu.getduration()<ts){
+            sellers.pop();
+            if (sellers.empty()){
+                quit = true;
+                break;
+            }
+            bu = sellers.top();
         }
+        if (!quit)
+            if (bu.getprice()<minb){
+                mintime = ts;
+                minb = bu.getprice();
+            }
     }
     if (!buyers.empty()){
         order se = buyers.top();
-        if (mintime!=-1&&se.getprice()-minb > maxv){
-            btime = mintime;
-            stime = ts;
-            maxv = se.getprice()-minb;
+         bool quit = false;
+        while (se.getduration()<ts){
+            buyers.pop();
+            if (buyers.empty()){
+                quit = true;
+                break;
+            }
+            se = buyers.top();
         }
+        if (!quit)
+            if (mintime!=-1&&se.getprice()-minb > maxv){
+                btime = mintime;
+                stime = ts;
+                maxv = se.getprice()-minb;
+            }
     }
 }
 void equity::adddealtprice(int p){
