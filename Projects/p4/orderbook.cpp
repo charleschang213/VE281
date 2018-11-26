@@ -43,14 +43,14 @@ void orderbook::order_execute(order neworder){
     client &c1 = this->clients[neworder.getcid()];
     if (neworder.getbuy()){
         if (eq.sellercount()==0){
-            if (neworder.getduration()>this->timestamp)
+            if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                 eq.addbuyer(neworder);
             return;
         }
         order seller = eq.getseller();
         while (seller.getduration()!=-1&&seller.getduration()<=this->timestamp) {
             if (eq.sellercount()==0){
-                if (neworder.getduration()>this->timestamp)
+                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                     eq.addbuyer(neworder);
                 return;
             }
@@ -78,14 +78,14 @@ void orderbook::order_execute(order neworder){
     }
     else {
         if (eq.buyercount()==0){
-            if (neworder.getduration()>this->timestamp)
+            if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                 eq.addseller(neworder);
             return;
         }
         order buyer = eq.getbuyer();
         while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
             if (eq.sellercount()==0){
-                if (neworder.getduration()>this->timestamp)
+                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                     eq.addseller(neworder);
                 return;
             }
