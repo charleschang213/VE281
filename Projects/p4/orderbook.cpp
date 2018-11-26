@@ -84,7 +84,7 @@ void orderbook::order_execute(order neworder){
             if ((seller.getduration()==-1||seller.getduration()>=this->timestamp)&&(seller.getshare()!=0))
                 eq.addseller(seller);
         }
-        if ((neworder.getduration()==-1||neworder.getduration()>=this->timestamp)&&(neworder.getshare()!=0))
+        if ((neworder.getduration()==-1||(neworder.getduration()>this->timestamp&&neworder.getduration()!=neworder.getts()))&&(neworder.getshare()!=0))
             eq.addbuyer(neworder);
     }
     else {
@@ -125,10 +125,10 @@ void orderbook::order_execute(order neworder){
                     eq.addseller(neworder);
                 return;
             }
-            if ((buyer.getduration()==-1||buyer.getduration()>this->timestamp)&&(buyer.getshare()!=0))
+            if ((buyer.getduration()==-1||buyer.getduration()>=this->timestamp)&&(buyer.getshare()!=0))
                 eq.addbuyer(buyer);
         }
-        if ((neworder.getduration()==-1||neworder.getduration()>this->timestamp)&&(neworder.getshare()!=0))
+        if ((neworder.getduration()==-1||(neworder.getduration()>this->timestamp&&neworder.getduration()!=neworder.getts()))&&(neworder.getshare()!=0))
             eq.addseller(neworder);
     }
 }
