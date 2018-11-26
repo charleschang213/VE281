@@ -51,7 +51,7 @@ void orderbook::order_execute(order neworder){
                 return;
             }
             order seller = eq.getseller();
-            while (seller.getduration()!=-1&&seller.getduration()<this->timestamp) {
+            while (seller.getduration()!=-1&&seller.getduration()<=this->timestamp) {
                 if (eq.sellercount()==0){
                     if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                         eq.addbuyer(neworder);
@@ -95,7 +95,7 @@ void orderbook::order_execute(order neworder){
                 return;
             }
             order buyer = eq.getbuyer();
-            while (buyer.getduration()!=-1&&buyer.getduration()<this->timestamp) {
+            while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
                 if (eq.buyercount()==0){
                     if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
                         eq.addseller(neworder);
