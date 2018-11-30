@@ -37,6 +37,7 @@ int graph::mst(){
             if (ufs.ufset_find(e.s)!=ufs.ufset_find(e.t)){
                 total += e.w;
                 ufs.ufset_union(e.s,e.t);
+                break;
             }
         }
     }
