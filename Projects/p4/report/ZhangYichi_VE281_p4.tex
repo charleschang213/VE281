@@ -1,0 +1,515 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{keyval}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\usepackage{bookmark}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+
+\lstset{
+  basicstyle=\footnotesize, 
+  numbers=left, 
+  numberstyle=\tiny\color{gray}, 
+  stepnumber=1,
+  numbersep=5pt, 
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  frame=shadowbox,
+  rulecolor=\color{black},
+  tabsize=2,
+  captionpos=b,
+  breaklines=true, 
+  breakatwhitespace=false, 
+  title=\lstname,
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  escapeinside={\%*}{*)}, 
+  morekeywords={*,...} 
+}
+
+\begin{document}
+
+\begin{lstlisting}[title=main.cpp,language=C++]
+#include <iostream>
+#include <getopt.h>
+#include "orderbook.h"
+
+static const struct option long_options[] = {
+    {"verbose",no_argument,NULL,'v'},
+    {"median",no_argument,NULL,'m'},
+    {"midpoint",no_argument,NULL,'p'},
+    {"transfers",no_argument,NULL,'t'},
+    {"ttt",required_argument,NULL,'g'}
+};
+int main(int argc, char *argv[]){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+    int opt;
+    bool median=false,midpoint=false,transfer=false,verbose=false;
+    std::vector<std::string> tttnames;
+    while ((opt=getopt_long(argc,argv,"vmptg:",long_options,NULL))!=EOF){
+        switch(opt){
+            case 'v':
+                verbose = true;
+                break;
+            case 'm':
+                median = true;
+                break;
+            case 'p':
+                midpoint = true;
+                break;
+            case 't':
+                transfer = true;
+                break;
+            case 'g':
+                tttnames.emplace_back(optarg);
+                break;
+            default:
+                std::cout << "Invalid argument" << std::endl;
+        }
+    }
+    orderbook ob(midpoint,median,transfer,verbose,tttnames);
+    int ts = 0;
+    int oid = 0;
+    while (std::cin){
+        std::string tmp;
+        std::getline(std::cin,tmp);
+        if (tmp.empty()) break;
+        order curr_order = ob.order_generate(oid,tmp);
+        oid++;
+        ob.order_execute(curr_order);
+    }
+    ob.endoftime();
+    ob.endofday();
+    return 0;
+}
+    
+\end{lstlisting}
+\begin{lstlisting}[title=equity.h,language=C++]
+#ifndef EQUITY_H
+#define EQUITY_H
+#include "order.h"
+#include <queue>
+#include <string>
+#include <iostream>
+#include <limits>
+class equity{
+    int eid;
+    std::string ename;
+    std::priority_queue<order> buyers,sellers;
+    std::vector<int> dealt;
+    int median;
+    int btime,stime,maxv,mintime,minb;
+    public:
+        equity(int eid,std::string ename):eid(eid),ename(ename),buyers(),sellers(),dealt(),median(-1),btime(-1),stime(-1),mintime(-1),minb(INT32_MAX),maxv(INT32_MIN){}
+        void addbuyer(order v){buyers.push(v);}
+        void addseller(order v){sellers.push(v);}
+        order getbuyer();
+        order getseller();
+        int sellercount(){return sellers.size();}
+        int buyercount(){return buyers.size();}
+        void adddealtprice(int p);
+        int getmedian(){return median;}
+        void modify(int ts,int val,bool buy);
+        void strategyout(){
+            std::cout << "Time travelers would buy " << ename<< " at time: "<< btime <<" and sell it at time: "<< stime << std::endl;
+        }
+        std::string getname(){return ename;}
+};
+#endif
+\end{lstlisting}
+\begin{lstlisting}[title=equity.cpp,language=C++]
+#include "equity.h"
+#include <algorithm>
+order equity::getbuyer()
+{
+    order v = buyers.top();
+    buyers.pop();
+    return v;
+}
+
+order equity::getseller()
+{
+    order v = sellers.top();
+    sellers.pop();
+    return v;
+}
+
+void equity::modify(int ts,int val, bool buy){
+    if (!buy){
+            if (val<minb){
+                mintime = ts;
+                minb = val;
+            }
+    }
+    else {
+            if (mintime!=-1&&val-minb > maxv){
+                btime = mintime;
+                stime = ts;
+                maxv = val-minb;
+            
+    }
+    }
+}
+void equity::adddealtprice(int p){
+    dealt.push_back(p);
+    int a = dealt.size()/2;
+    int b = (dealt.size()-1)/2;
+    std::nth_element(dealt.begin(),dealt.begin()+a,dealt.end());
+    int aa= dealt[a];
+    std::nth_element(dealt.begin(),dealt.begin()+b,dealt.end());
+    int bb = dealt[b];
+    this->median = (aa+bb)/2;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[title=client.h,language=C++]
+#ifndef CLIENT_H
+#define CLIENT_H
+#include <string>
+class client{
+    int cid;
+    int income;
+    std::string cname;
+    int bought,sold;
+    public:
+        client(int cid,std::string cname,int income):cid(cid),cname(cname),income(income),bought(0),sold(0){}
+        int getcid(){return cid;}
+        int getincome(){return income;}
+        int buy(int share,int val){bought+=share;income-=val;}
+        int sell(int share,int val){sold+=share;income+=val;}
+        std::string getname(){return cname;}
+        int getbought(){return bought;}
+        int getsold(){return sold;}
+};
+#endif
+    \end{lstlisting}
+
+    \begin{lstlisting}[title=order.h,language=C++]
+#ifndef ORDER_H
+#define ORDER_H
+class order{
+    int oid;
+    int cid,eid;
+    bool buy;
+    int share;
+    int duration,ts;
+    int price;
+    public:
+        friend bool operator<(const order &a,const order &b);
+        order(int oid,int cid,int eid,bool buy,int share,int duration,int ts,int price):
+            oid(oid),cid(cid),eid(eid),buy(buy),share(share),duration(duration),ts(ts),price(price){}
+        void doneshare(int val){share-=val;}
+        int getoid(){return oid;}
+        int getcid(){return cid;}
+        int geteid(){return eid;}
+        bool getbuy(){return buy;}
+        int getduration(){return duration;}
+        int getprice(){return price;}
+        int getshare(){return share;}
+        int getts(){return ts;}
+};
+
+bool operator<(const order &a,const order &b);
+#endif
+            \end{lstlisting}
+
+
+\begin{lstlisting}[title=order.h,language=C++]
+#ifndef ORDER_H
+#define ORDER_H
+class order{
+    int oid;
+    int cid,eid;
+    bool buy;
+    int share;
+    int duration,ts;
+    int price;
+    public:
+        friend bool operator<(const order &a,const order &b);
+        order(int oid,int cid,int eid,bool buy,int share,int duration,int ts,int price):
+            oid(oid),cid(cid),eid(eid),buy(buy),share(share),duration(duration),ts(ts),price(price){}
+        void doneshare(int val){share-=val;}
+        int getoid(){return oid;}
+        int getcid(){return cid;}
+        int geteid(){return eid;}
+        bool getbuy(){return buy;}
+        int getduration(){return duration;}
+        int getprice(){return price;}
+        int getshare(){return share;}
+        int getts(){return ts;}
+};
+
+bool operator<(const order &a,const order &b);
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[title=order.cpp,language=C++]
+#include "order.h"
+bool operator<(const order &a,const order &b){
+    if (a.buy){
+        if (a.price==b.price) return a.oid>b.oid;
+        return a.price<b.price;
+    }
+    if (a.price==b.price) return a.oid>b.oid;
+        return a.price>b.price;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[title=orderbook.h,language=C++]
+#ifndef ORDERBOOK_H
+#define ORDERBOOK_H
+#include <vector>
+#include <unordered_map>
+#include <string>
+#include "equity.h"
+#include "client.h"
+class orderbook{
+    std::unordered_map<std::string,int> ename,cname;
+    std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > ordered_ename,ordered_cname;
+    std::vector<equity> equities;
+    std::vector<client> clients;
+    std::vector<std::string> tttnames;
+    bool midpoint,median,transfer,verbose;
+    int timestamp,income,transferred,completed,cshare;
+    public:
+        order order_generate(int oid,std::string line);
+        orderbook(bool midpoint,bool median,bool transfer,bool verbose,std::vector<std::string> tttnames):
+            midpoint(midpoint),median(median),transfer(transfer),verbose(verbose),tttnames(tttnames),
+            ename(),cname(),ordered_ename(),ordered_cname(),equities(),clients(),timestamp(0),income(0),transferred(0),completed(0),cshare(0){}
+        void order_execute(order neworder);
+        void endofday();
+        void endoftime(int ts=-1);
+        int getts(){return timestamp;}
+};
+#endif
+\end{lstlisting}
+
+\begin{lstlisting}[title=orderbook.cpp,language=C++]
+#include "orderbook.h"
+#include <sstream>
+#include <iostream>
+
+#define MIN(a,b) a<b?a:b
+
+order orderbook::order_generate(int oid,std::string line){
+    std::istringstream sin(line);
+    std::string tmp;
+    int cid,share,duration,price,eid,ts;
+    bool buy;
+    sin >> tmp;
+    ts = std::stoi(tmp);
+    if (ts>timestamp) endoftime(ts);
+    sin >> tmp;
+    if (cname.find(tmp)==cname.end()){
+        ordered_cname.push(tmp);
+        cid = cname.size();
+        cname[tmp] = cid;
+        clients.emplace_back(cid,tmp,0);
+    }
+    else cid = cname[tmp];
+    sin >> tmp;
+    buy = (tmp=="BUY");
+    sin >> tmp;
+    if (ename.find(tmp)==ename.end()){
+        ordered_ename.push(tmp);
+        eid = ename.size();
+        ename[tmp] = eid;
+        equities.emplace_back(eid,tmp);
+    } else eid = ename[tmp];
+    sin >> tmp;
+    price = std::stoi(tmp.substr(1));
+    sin >> tmp;
+    share = std::stoi(tmp.substr(1));
+    sin >> tmp;
+    duration = std::stoi(tmp);
+    if (duration!=-1) duration+=ts;
+    sin.clear();
+    return order(oid,cid,eid,buy,share,duration,ts,price); 
+}
+
+void orderbook::order_execute(order neworder){
+    equity &eq = this->equities[neworder.geteid()];
+    eq.modify(timestamp,neworder.getprice(),neworder.getbuy());
+    client &c1 = this->clients[neworder.getcid()];
+    if (neworder.getbuy()){
+        while (neworder.getshare()!=0){
+            if (eq.sellercount()==0){
+                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                    eq.addbuyer(neworder);
+                //eq.modify(timestamp);
+                return;
+            }
+            order seller = eq.getseller();
+            while (seller.getduration()!=-1&&seller.getduration()<=this->timestamp) {
+                if (eq.sellercount()==0){
+                    if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                        eq.addbuyer(neworder);
+                    //eq.modify(timestamp);
+                    return;
+                }
+                seller = eq.getseller();
+            }
+            client &c2 = this->clients[seller.getcid()];
+            if (seller.getprice()<=neworder.getprice()){
+                int dshare = MIN(seller.getshare(),neworder.getshare());
+                seller.doneshare(dshare);
+                neworder.doneshare(dshare);
+                int commision = seller.getprice()*dshare/100;
+                this->income+=2*commision;
+                c2.sell(dshare,seller.getprice()*dshare);
+                c1.buy(dshare,seller.getprice()*dshare);
+                this->transferred+=seller.getprice()*dshare;
+                this->completed++;
+                this->cshare+=dshare;
+                eq.adddealtprice(seller.getprice());
+                if (this->verbose)
+                    std::cout << c1.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c2.getname() << " for $" << seller.getprice() << "/share" << std::endl; 
+            }
+            else{
+                eq.addseller(seller);
+                if ((neworder.getduration()==-1||neworder.getduration()>this->timestamp)&&(neworder.getshare()!=0))
+                        eq.addbuyer(neworder);
+                    //eq.modify(timestamp);
+                    return;
+            }
+            if ((seller.getduration()==-1||seller.getduration()>this->timestamp)&&(seller.getshare()!=0))
+                eq.addseller(seller);
+        }
+        if ((neworder.getduration()==-1||(neworder.getduration()>this->timestamp&&neworder.getduration()!=neworder.getts()))&&(neworder.getshare()!=0))
+            eq.addbuyer(neworder);
+    }
+    else {
+        while (neworder.getshare()!=0){
+            if (eq.buyercount()==0){
+                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                    eq.addseller(neworder);
+                //eq.modify(timestamp);
+                return;
+            }
+            order buyer = eq.getbuyer();
+            while (buyer.getduration()!=-1&&buyer.getduration()<=this->timestamp) {
+                if (eq.buyercount()==0){
+                    if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                        eq.addseller(neworder);
+                    //eq.modify(timestamp);
+                    return;
+                }
+                buyer = eq.getbuyer();
+            }
+            client &c2 = this->clients[buyer.getcid()];
+            if (neworder.getprice()<=buyer.getprice()){
+                int dshare = MIN(buyer.getshare(),neworder.getshare());
+                buyer.doneshare(dshare);
+                neworder.doneshare(dshare);
+                int commision = buyer.getprice()*dshare/100;
+                this->income+=2*commision;
+                c2.buy(dshare,buyer.getprice()*dshare);
+                c1.sell(dshare,buyer.getprice()*dshare);
+                this->transferred+=buyer.getprice()*dshare;
+                this->completed++;
+                this->cshare+=dshare;
+                eq.adddealtprice(buyer.getprice());
+                if (this->verbose)
+                    std::cout << c2.getname() << " purchased " << dshare << " shares of " << eq.getname() << " from " << c1.getname() << " for $" << buyer.getprice() << "/share" << std::endl; 
+            }
+            else {
+                eq.addbuyer(buyer);
+                if (neworder.getduration()==-1||neworder.getduration()>this->timestamp)
+                    eq.addseller(neworder);
+                //eq.modify(timestamp);
+                return;
+            }
+            if ((buyer.getduration()==-1||buyer.getduration()>this->timestamp)&&(buyer.getshare()!=0))
+                eq.addbuyer(buyer);
+        }
+        if ((neworder.getduration()==-1||(neworder.getduration()>this->timestamp&&neworder.getduration()!=neworder.getts()))&&(neworder.getshare()!=0))
+            eq.addseller(neworder);
+    }
+    //eq.modify(timestamp);
+}
+
+void orderbook::endofday(){
+    std::cout << "---End of Day---\nCommission Earnings: $" << this->income << "\nTotal Amount of Money Transferred: $" << this->transferred << "\nNumber of Completed Trades: " << this->completed << "\nNumber of Shares Traded: " << this->cshare << std::endl;
+    if (this->transfer){
+        while (!(this->ordered_cname.empty())){
+            std::string na = ordered_cname.top();
+            ordered_cname.pop();
+            client cl = this->clients[cname[na]];
+            std::cout << na << " bought " << cl.getbought() << " and sold " << cl.getsold() << " for a net transfer of $" << cl.getincome() << std::endl;
+        }
+    }
+    for (auto t:tttnames){
+        equity eq = equities[ename[t]];
+        eq.strategyout();
+    }
+}
+
+void orderbook::endoftime(int ts){
+    //for (auto &t:equities) t.modify(timestamp);
+    if (this->median){
+        std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
+        while (!(newname.empty())){
+            std::string na = newname.top();
+            newname.pop();
+            equity eq = this->equities[ename[na]];
+            int me = eq.getmedian();
+            if (me>=0){
+                std::cout << "Median match price of " << na << " at time " << timestamp << " is $" << me << std::endl; 
+            }
+        }
+    }
+    if (this->midpoint){
+        std::priority_queue<std::string,std::vector<std::string>,std::greater<std::string> > newname(this->ordered_ename);
+        while (!(newname.empty())){
+            std::string na = newname.top();
+            newname.pop();
+            equity eq = this->equities[ename[na]];
+            if (eq.buyercount()==0||eq.sellercount()==0)
+                std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
+            else{
+                order bu = eq.getbuyer();
+                bool quit=false;
+                while (bu.getduration()!=-1&&bu.getduration()<=this->timestamp){
+                    if (eq.buyercount()==0){
+                        std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
+                        quit=true;
+                        break;
+                    }
+                    bu = eq.getbuyer();
+                }
+                if (quit) continue;
+                order se = eq.getseller();
+                while (se.getduration()!=-1&&se.getduration()<=this->timestamp){
+                    if (eq.sellercount()==0){
+                        std::cout << "Midpoint of " << na << " at time " << timestamp << " is undefined" << std::endl;
+                        quit = true;
+                        break;
+                    }
+                    se = eq.getseller();
+                }
+                if (quit) continue;
+                int mp = (bu.getprice()+se.getprice())/2;
+                eq.addbuyer(bu);
+                eq.addseller(se);
+                std::cout << "Midpoint of " << na << " at time " << timestamp << " is $" << mp << std::endl;
+            }
+        }
+    }
+    if (ts!=-1)
+        timestamp = ts;
+    else timestamp++;
+}
+    \end{lstlisting}
+
+\end{document}
