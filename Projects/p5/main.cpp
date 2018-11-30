@@ -12,5 +12,8 @@ int main(){
     }
     if (a.dag()) std::cout << "The graph is a DAG" << std::endl;
     else std::cout << "The graph is not a DAG" << std::endl;
+    int minimum = a.mst();
+    if (minimum==-1) std::cout << "No MST exists!" << std::endl;
+    else std::cout << "The total weight of MST is " << minimum << std::endl;
     return 0;
 }
