@@ -2,6 +2,8 @@
 #include <iostream>
 
 int main(){
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
     int size;
     std::cin >> size;
     graph a(size);
