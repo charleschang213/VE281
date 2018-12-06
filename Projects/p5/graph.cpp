@@ -1,11 +1,10 @@
 #include "graph.h"
-#include "ufs.h"
 #include <set>
 
 void graph::addedge(int s,int t,int w){
     this->adj[s].emplace_back(t,w);
+    this->convadj[t].emplace_back(s,w);
     this->innode[t]++;
-    this->edges.push({s,t,w});
 }
 
 bool graph::dag(){
@@ -28,33 +27,16 @@ bool graph::dag(){
     return false;
 }
 
-int graph::mst(){
-    ufset ufs(this->size);
-    int total = 0;
-    for (int i=0;i<this->size-1;i++){
-        while (true){
-            if (this->edges.empty()) return -1;
-            edge e = this->edges.top();
-            this->edges.pop();
-            if (ufs.ufset_find(e.s)!=ufs.ufset_find(e.t)){
-                total += e.w;
-                ufs.ufset_union(e.s,e.t);
-                break;
-            }
-        }
-    }
-    return total;
-}
-
 struct primcmp{
     bool operator()(const std::pair<int, int> &lhs,const std::pair<int, int> &rhs){
+        if (lhs.second==rhs.second) return lhs.first< rhs.first;
         return lhs.second<rhs.second;
     }
 };
 
 int graph::prim(){
     std::vector<int> d(this->size,INT_MAX);
-    std::multiset<std::pair<int, int>,primcmp> dset;
+    std::set<std::pair<int, int>,primcmp> dset;
     d[rand()%this->size] = 0;
     int total = 0;
     for (int i=0;i<this->size;i++){
@@ -62,7 +44,7 @@ int graph::prim(){
     }
     while (!dset.empty()){
         int dnum = dset.begin()->first;
-        std::cerr << dnum << " " << d[dnum] << std::endl;
+        //std::cerr << dset.size() << " " << dnum << " " << d[dnum] << std::endl;
         if (d[dnum]==INT_MAX) return -1;
         dset.erase(dset.begin());
         total+=d[dnum];
@@ -71,6 +53,18 @@ int graph::prim(){
             int wg = edg.second;
             auto where = dset.find(std::pair<int,int>(dst,d[dst]));
             if ((where!=dset.end())&&(d[dst]>wg)){
+                //std::cerr << "Find " << dst << std::endl;
+                dset.erase(where);
+                d[dst]=wg;
+                dset.emplace(dst,d[dst]);
+            }
+        }
+        for (auto edg:this->convadj[dnum]){
+            int dst = edg.first;
+            int wg = edg.second;
+            auto where = dset.find(std::pair<int,int>(dst,d[dst]));
+            if ((where!=dset.end())&&(d[dst]>wg)){
+                //std::cerr << "Find " << dst << std::endl;
                 dset.erase(where);
                 d[dst]=wg;
                 dset.emplace(dst,d[dst]);

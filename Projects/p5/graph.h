@@ -20,13 +20,12 @@ struct edgecomp{
 class graph{
     int size;
     std::vector<std::vector<std::pair<int,int> > > adj;
+    std::vector<std::vector<std::pair<int,int> > > convadj;
     std::vector<int> innode;
-    std::priority_queue<edge,std::vector<edge>,edgecomp> edges;
     public:
-        graph(int size):size(size),adj(size,std::vector<std::pair<int, int> >()),innode(size,0){}  
+        graph(int size):size(size),adj(size,std::vector<std::pair<int, int> >()),convadj(size,std::vector<std::pair<int, int> >()),innode(size,0){}  
         void addedge(int s,int t,int w);
         bool dag();
-        int mst();
         int prim();
 };
 #endif
