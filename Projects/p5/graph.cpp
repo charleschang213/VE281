@@ -54,7 +54,7 @@ struct primcmp{
 
 int graph::prim(){
     std::vector<int> d(this->size,INT_MAX);
-    std::set<std::pair<int, int>,primcmp> dset;
+    std::multiset<std::pair<int, int>,primcmp> dset;
     d[rand()%this->size] = 0;
     int total = 0;
     for (int i=0;i<this->size;i++){
