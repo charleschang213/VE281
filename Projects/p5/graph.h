@@ -2,6 +2,9 @@
 #define GRAPH_H
 #include <vector>
 #include <queue>
+#include <utility>
+#include <climits>
+#include <cstdlib>
 
 typedef struct _edge_{
     int s,t,w;
@@ -23,5 +26,6 @@ class graph{
         void addedge(int s,int t,int w);
         bool dag();
         int mst();
+        int prim();
 };
 #endif

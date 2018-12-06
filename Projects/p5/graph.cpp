@@ -1,5 +1,7 @@
 #include "graph.h"
 #include "ufs.h"
+#include <set>
+
 void graph::addedge(int s,int t,int w){
     this->adj[s].emplace_back(t,w);
     this->innode[t]++;
@@ -38,6 +40,39 @@ int graph::mst(){
                 total += e.w;
                 ufs.ufset_union(e.s,e.t);
                 break;
+            }
+        }
+    }
+    return total;
+}
+
+struct primcmp{
+    bool operator()(const std::pair<int, int> &lhs,const std::pair<int, int> &rhs){
+        return lhs.second<rhs.second;
+    }
+};
+
+int graph::prim(){
+    std::vector<int> d(this->size,INT_MAX);
+    std::set<std::pair<int, int>,primcmp> dset;
+    d[rand()%this->size] = 0;
+    int total = 0;
+    for (int i=0;i<this->size;i++){
+        dset.emplace(i,d[i]);
+    }
+    while (!dset.empty()){
+        int dnum = dset.begin()->first;
+        if (d[dnum]==INT_MAX) return -1;
+        d.erase(d.begin());
+        total+=d[dnum];
+        for (auto edg:this->adj[dnum]){
+            int dst = edg.first;
+            int wg = edg.second;
+            auto where = dset.find(std::pair<int,int>(dst,d[dst]));
+            if ((where!=dset.end())&&(d[dst]>d[dnum]+wg)){
+                dset.erase(where);
+                d[dst]=d[dnum]+wg;
+                dset.emplace(dst,d[dst]);
             }
         }
     }
