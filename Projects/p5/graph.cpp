@@ -69,9 +69,9 @@ int graph::prim(){
             int dst = edg.first;
             int wg = edg.second;
             auto where = dset.find(std::pair<int,int>(dst,d[dst]));
-            if ((where!=dset.end())&&(d[dst]>d[dnum]+wg)){
+            if ((where!=dset.end())&&(d[dst]>wg)){
                 dset.erase(where);
-                d[dst]=d[dnum]+wg;
+                d[dst]=wg;
                 dset.emplace(dst,d[dst]);
             }
         }
