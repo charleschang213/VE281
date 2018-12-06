@@ -62,6 +62,7 @@ int graph::prim(){
     }
     while (!dset.empty()){
         int dnum = dset.begin()->first;
+        std::cerr << dnum << " " << d[dnum] << std::endl;
         if (d[dnum]==INT_MAX) return -1;
         dset.erase(dset.begin());
         total+=d[dnum];

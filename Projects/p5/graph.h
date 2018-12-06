@@ -5,6 +5,7 @@
 #include <utility>
 #include <climits>
 #include <cstdlib>
+#include <iostream>
 
 typedef struct _edge_{
     int s,t,w;
