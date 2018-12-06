@@ -63,7 +63,7 @@ int graph::prim(){
     while (!dset.empty()){
         int dnum = dset.begin()->first;
         if (d[dnum]==INT_MAX) return -1;
-        d.erase(d.begin());
+        dset.erase(dset.begin());
         total+=d[dnum];
         for (auto edg:this->adj[dnum]){
             int dst = edg.first;
